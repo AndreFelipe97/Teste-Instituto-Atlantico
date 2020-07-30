@@ -3,7 +3,7 @@ backend/backend/node_modules
 backend/backend/tmp/
 
 # Frontend
-frontend/node_modules
+frontend/frontend/node_modules
 frontend/frontend/.pnp
 frontend/frontend/.pnp.js
 
