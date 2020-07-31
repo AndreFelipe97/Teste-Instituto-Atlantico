@@ -1,10 +1,15 @@
 import React from 'react';
 import { Table } from 'antd';
 
+import indexUnique from '../../util/indexUnique';
+
 
 // import { Container } from './styles';
 
 function TableComponent({data}) {
+  const boards = data.map(d => d.board)
+  const projects = data.map(d => d.project)
+
   const columns = [
     {
       title: 'Nome',
@@ -23,16 +28,10 @@ function TableComponent({data}) {
     {
       title: 'Projetos',
       dataIndex: 'project',
-      filters: [
-        {
-          text: 'A',
-          value: 'A',
-        },
-        {
-          text: 'B',
-          value: 'B',
-        },
-      ],
+      filters: projects.filter(indexUnique).map(project => ({
+        text: project,
+        value: project,
+      })),
       onFilter: (value, record) => record.project.indexOf(value) === 0,
       sorter: (a, b) => a.project.length - b.project.length,
       sortDirections: ['descend', 'ascend'],
@@ -40,18 +39,10 @@ function TableComponent({data}) {
     {
       title: 'Placas',
       dataIndex: 'board',
-      filters: [
-        {
-          text: 'A',
-          value: 'A',
-        },
-        {
-          text: 'B',
-          value: 'B',
-        },
-      ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
+      filters: boards.filter(indexUnique).map(board => ({
+        text: board,
+        value: board,
+      })),
       onFilter: (value, record) => record.board.indexOf(value) === 0,
       sorter: (a, b) => a.board.length - b.board.length,
       sortDirections: ['descend', 'ascend'],
