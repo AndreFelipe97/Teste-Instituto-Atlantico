@@ -7,6 +7,10 @@ class FirmwareController {
       id, name, board,
     } = await Firmware.create(request.body);
 
+    if (!request.userUpload_file) {
+      return response.status(400).json({ error: 'User does not have permission' });
+    }
+
     return response.status(200).json({
       id, name, board,
     });
