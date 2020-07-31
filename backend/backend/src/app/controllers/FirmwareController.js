@@ -3,13 +3,13 @@ import File from '../models/File';
 
 class FirmwareController {
   async store(request, response) {
-    const {
-      id, name, board,
-    } = await Firmware.create(request.body);
-
     if (!request.userUpload_file) {
       return response.status(400).json({ error: 'User does not have permission' });
     }
+
+    const {
+      id, name, board,
+    } = await Firmware.create(request.body);
 
     return response.status(200).json({
       id, name, board,
