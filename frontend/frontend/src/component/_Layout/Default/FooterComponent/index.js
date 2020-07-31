@@ -1,9 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Footer } from './styles';
 
-function FooterComponent({user}) {
+export default function FooterComponent() {
+  const { user } = useSelector(state => state.user)
   return (
     <Footer>
       <span>Teste</span>
@@ -11,7 +12,3 @@ function FooterComponent({user}) {
     </Footer>
   );
 }
-
-export default connect(state => ({
-  user: state.user,
-}))(FooterComponent);
