@@ -10,7 +10,14 @@ function FileListing() {
   useEffect(() => {
     async function fileListing() {
       const response = await api.get('firmwares')
-      setData([...data, ...response.data])
+      const firmwares = []
+      response.data.map(r => firmwares.push({
+        version: r.version,
+        project: r.project,
+        board: r.board,
+        name: r.file.name,
+      }))
+      setData([...data, ...firmwares])
     }
 
     fileListing()
