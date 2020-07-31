@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom'
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import {
   FormOutlined,
   PieChartOutlined,
@@ -16,6 +16,7 @@ import {
 function SidebarComponent(props) {
   const [collapsed, setCollapsed] = useState(false)
   const [top, setTop] = useState('Teste')
+  const user = useSelector(state => state.user)
   let history = useHistory();
 
   const onCollapse = collapsed => {
@@ -42,7 +43,7 @@ function SidebarComponent(props) {
 
     history.push(`/${path}`)
   }
-
+  
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <Top>{top}</Top>
@@ -50,9 +51,11 @@ function SidebarComponent(props) {
         <Item key="1" icon={<PieChartOutlined />} onClick={() => handleClick('listagem')} >
           Listagem
         </Item>
-        <Item key="2" icon={<FormOutlined />} onClick={() => handleClick('cadastro')} >
-          Cadastro
-        </Item>
+        {user.user.upload_file ? (
+            <Item key="2" icon={<FormOutlined />} onClick={() => handleClick('cadastro')} >
+              Cadastro
+            </Item>) : null
+        }
       </MenuStyled>
     </Sider>
   );
