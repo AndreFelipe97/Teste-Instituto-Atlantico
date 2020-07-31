@@ -11,6 +11,8 @@ import {
 
 import { UploadOutlined } from '@ant-design/icons';
 
+import FileName from '../../util/stringFormat';
+
 import { ButtonSubmit } from './styles';
 
 function FileRegistration() {
@@ -34,7 +36,6 @@ function FileRegistration() {
       }
       if (info.file.status === 'done') {
         setFile(info.file['originFileObj'])
-        console.log(info.file, info.fileList);
       } else if (info.file.status === 'error') {
         message.error(`Falha ao anexar o arquivo ${info.file.name}.`);
       }
@@ -49,33 +50,21 @@ function FileRegistration() {
 
   const handleSubmit = async () => {
     const data = new FormData()
+    // setFile({...file, name: FileName(file.name, values.project, values.version)})
     data.append('file', file)
-    const response = await api.post('/files', data); 
-    console.log(response.data.id)
-    setValues({...values, file_id: `${response.data.id}`})
+    const response = await api.post('/files', data)
 
-    await api.post('/firmwares', values)
+    const newFirmware = {
+      ...values,
+      file_id: response.data.id
+    }
+
+    await api.post('/firmwares', newFirmware)
     history.push(`/listagem`)
   }
 
   return (
     <>
-      <Form
-        wrapperCol={{ span: 24 }}
-        layout="horizontal"
-        initialValues={{ size: componentSize }}
-        onValuesChange={onFormLayoutChange}
-        size={componentSize}
-        encType="multipart/form-data"
-      >
-        <Form.Item label="Arquivo">
-          <Upload {...props} accept='application/*'>
-            <Button >
-              <UploadOutlined /> Anexar arquivo
-            </Button>
-          </Upload>
-        </Form.Item>
-      </Form>
       <Form
         wrapperCol={{ span: 24 }}
         layout="horizontal"
@@ -92,8 +81,24 @@ function FileRegistration() {
         <Form.Item label="Placa">
           <Input name="board" onChange={handleChange('board')} />
         </Form.Item>
+      </Form>
+      <Form
+        wrapperCol={{ span: 24 }}
+        layout="horizontal"
+        initialValues={{ size: componentSize }}
+        onValuesChange={onFormLayoutChange}
+        size={componentSize}
+        encType="multipart/form-data"
+      >
+        <Form.Item label="Arquivo">
+          <Upload {...props} accept='application/*'>
+            <Button disabled={values.version && values.project ? false : true}>
+              <UploadOutlined /> Anexar arquivo
+            </Button>
+          </Upload>
+        </Form.Item>
         <Form.Item>
-          <ButtonSubmit htmlType="subbutmit" onClick={() => handleSubmit()}>
+          <ButtonSubmit htmlType="subbutmit" onClick={() => handleSubmit()} disabled={!values.version && !values.project && !values.board && !file ? true : false}>
             Salvar
           </ButtonSubmit>
         </Form.Item>
