@@ -11,8 +11,6 @@ import {
 
 import { UploadOutlined } from '@ant-design/icons';
 
-import FileName from '../../util/stringFormat';
-
 import { ButtonSubmit } from './styles';
 
 function FileRegistration() {
@@ -50,8 +48,9 @@ function FileRegistration() {
 
   const handleSubmit = async () => {
     const data = new FormData()
-    // setFile({...file, name: FileName(file.name, values.project, values.version)})
     data.append('file', file)
+    data.append('project', values.project)
+    data.append('version', values.version)
     const response = await api.post('/files', data)
 
     const newFirmware = {
